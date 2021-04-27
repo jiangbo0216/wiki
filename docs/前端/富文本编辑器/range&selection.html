@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="part1">
+    <h1>range</h1>
+    <p id="p" tabindex="-1">Example: <i>italic</i> and <b>bold</b></p>
+  
+    From <input id="start" type="number" value=1 min="0" max="4"> – To <input id="end" type="number" value=4 min="0" max="4">
+    <button id="button">Click to select</button>
+  
+    <p id="result"></p>
+  
+    <div contenteditable="true" style="height: 100px; border: 1px black solid;"></div>
+  </div>
+
+  <h1>selection</h1>
+  From <input id="from" disabled> – To <input id="to" disabled>
+  <br>
+  <br>
+  
+  Cloned: <span id="cloned"></span>
+  <br>
+  As text: <span id="astext"></span>
+
+  <h1>input</h1>
+  <textarea id="area" style="width:80%;height:60px">
+  Selecting in this text updates values below.
+  </textarea>
+  <br>
+  From <input id="input_from" disabled> – To <input id="input_to" disabled>
+
+
+</body>
+<script>
+  // 范围选择
+
+  // 直接使用 p 引用 dom
+  let range = new Range();
+
+  range.setStart(p, 0);
+  range.setEnd(p, 2);
+
+  // 范围的 toString 以文本形式返回其内容（不带标签）
+  // alert(range); // Example: italic
+
+  // 将此范围应用于文档选择（后文有解释）
+  document.getSelection().addRange(range);
+
+  button.onclick = () => {
+    range = new Range();
+
+    range.setStart(p, start.value);
+    range.setEnd(p, end.value);
+
+    // 应用选择，后文有解释
+    document.getSelection().removeAllRanges();
+    document.getSelection().addRange(range);
+  };
+
+  // 选择节点一部分
+  // let range = new Range();
+
+  // range.setStart(p.firstChild, 2);
+  // range.setEnd(p.querySelector('b').firstChild, 3);
+
+  // alert(range); // ample: italic and bol
+
+  // // 使用此范围进行选择（后文有解释）
+  // window.getSelection().addRange(range);
+
+
+  // keydown 事件
+  p.addEventListener('keydown', console.log)
+
+
+
+  // 常用range方法
+
+  // 下面演示了上述的每个方法：
+  let methods = {
+    deleteContents() {
+      range.deleteContents()
+    },
+    extractContents() {
+      let content = range.extractContents();
+      result.innerHTML = "";
+      result.append("extracted: ", content);
+    },
+    cloneContents() {
+      let content = range.cloneContents();
+      result.innerHTML = "";
+      result.append("cloned: ", content);
+    },
+    insertNode() {
+      let newNode = document.createElement('u');
+      newNode.innerHTML = "NEW NODE";
+      range.insertNode(newNode);
+    },
+    surroundContents() {
+      let newNode = document.createElement('u');
+      try {
+        range.surroundContents(newNode);
+      } catch(e) { alert(e) }
+    },
+    resetExample() {
+      p.innerHTML = `Example: <i>italic</i> and <b>bold</b>`;
+      result.innerHTML = "";
+
+      range.setStart(p.firstChild, 2);
+      range.setEnd(p.querySelector('b').firstChild, 3);
+
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+    }
+  };
+
+  for(let method in methods) {
+    // dom末尾加上html string https://stackoverflow.com/questions/7327056/appending-html-string-to-the-dom
+    part1.insertAdjacentHTML('beforeend' ,`<div><button onclick="methods.${method}()">${method}</button></div>`);
+  }
+
+  methods.resetExample();
+
+</script>
+<script>
+  // 选择事件
+  let selection 
+
+  document.onselectionchange = function() {
+    let {anchorNode, anchorOffset, focusNode, focusOffset} = document.getSelection();
+
+    from.value = `${anchorNode && anchorNode.data}:${anchorOffset}`;
+    to.value = `${focusNode && focusNode.data}:${focusOffset}`;
+
+    selection = document.getSelection();
+
+    cloned.innerHTML = astext.innerHTML = "";
+
+    // 从范围复制 DOM 节点（这里我们支持多选）
+    for (let i = 0; i < selection.rangeCount; i++) {
+      cloned.append(selection.getRangeAt(i).cloneContents());
+    }
+
+    // 获取为文本形式
+    astext.innerHTML += selection.toString();
+  };
+</script>
+<script>
+  // 文本框选择
+  area.onselect = function() {
+    input_from.value = area.selectionStart;
+    input_to.value = area.selectionEnd;
+  };
+</script>
+</html>

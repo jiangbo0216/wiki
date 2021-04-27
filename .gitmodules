@@ -1,0 +1,3 @@
+[submodule "docs/王道计算机组成原理"]
+	path = docs/王道计算机组成原理
+ 	url = git@github.com:jiangbo0216/principles-of-computer-organization.git

@@ -1,0 +1,1 @@
+如果添加了默认值且child没有声明src为props, 会再dom上生成一个src的属性

@@ -1,0 +1,776 @@
+\documentclass[10pt,a4paper]{article}
+
+% Packages
+\usepackage{fancyhdr}           % For header and footer
+\usepackage{multicol}           % Allows multicols in tables
+\usepackage{tabularx}           % Intelligent column widths
+\usepackage{tabulary}           % Used in header and footer
+\usepackage{hhline}             % Border under tables
+\usepackage{graphicx}           % For images
+\usepackage{xcolor}             % For hex colours
+%\usepackage[utf8x]{inputenc}    % For unicode character support
+\usepackage[T1]{fontenc}        % Without this we get weird character replacements
+\usepackage{colortbl}           % For coloured tables
+\usepackage{setspace}           % For line height
+\usepackage{lastpage}           % Needed for total page number
+\usepackage{seqsplit}           % Splits long words.
+%\usepackage{opensans}          % Can't make this work so far. Shame. Would be lovely.
+\usepackage[normalem]{ulem}     % For underlining links
+% Most of the following are not required for the majority
+% of cheat sheets but are needed for some symbol support.
+\usepackage{amsmath}            % Symbols
+\usepackage{MnSymbol}           % Symbols
+\usepackage{wasysym}            % Symbols
+%\usepackage[english,german,french,spanish,italian]{babel}              % Languages
+
+% Document Info
+\author{James Hopkin (tasjaevan)}
+\pdfinfo{
+  /Title (redis.pdf)
+  /Creator (Cheatography)
+  /Author (James Hopkin (tasjaevan))
+  /Subject (Redis Cheat Sheet)
+}
+
+% Lengths and widths
+\addtolength{\textwidth}{6cm}
+\addtolength{\textheight}{-1cm}
+\addtolength{\hoffset}{-3cm}
+\addtolength{\voffset}{-2cm}
+\setlength{\tabcolsep}{0.2cm} % Space between columns
+\setlength{\headsep}{-12pt} % Reduce space between header and content
+\setlength{\headheight}{85pt} % If less, LaTeX automatically increases it
+\renewcommand{\footrulewidth}{0pt} % Remove footer line
+\renewcommand{\headrulewidth}{0pt} % Remove header line
+\renewcommand{\seqinsert}{\ifmmode\allowbreak\else\-\fi} % Hyphens in seqsplit
+% This two commands together give roughly
+% the right line height in the tables
+\renewcommand{\arraystretch}{1.3}
+\onehalfspacing
+
+% Commands
+\newcommand{\SetRowColor}[1]{\noalign{\gdef\RowColorName{#1}}\rowcolor{\RowColorName}} % Shortcut for row colour
+\newcommand{\mymulticolumn}[3]{\multicolumn{#1}{>{\columncolor{\RowColorName}}#2}{#3}} % For coloured multi-cols
+\newcolumntype{x}[1]{>{\raggedright}p{#1}} % New column types for ragged-right paragraph columns
+\newcommand{\tn}{\tabularnewline} % Required as custom column type in use
+
+% Font and Colours
+\definecolor{HeadBackground}{HTML}{333333}
+\definecolor{FootBackground}{HTML}{666666}
+\definecolor{TextColor}{HTML}{333333}
+\definecolor{DarkBackground}{HTML}{594085}
+\definecolor{LightBackground}{HTML}{E2DEEA}
+\renewcommand{\familydefault}{\sfdefault}
+\color{TextColor}
+
+% Header and Footer
+\pagestyle{fancy}
+\fancyhead{} % Set header to blank
+\fancyfoot{} % Set footer to blank
+\fancyhead[L]{
+\noindent
+\begin{multicols}{3}
+\begin{tabulary}{5.8cm}{C}
+    \SetRowColor{DarkBackground}
+    \vspace{-7pt}
+    {\parbox{\dimexpr\textwidth-2\fboxsep\relax}{\noindent
+        \hspace*{-6pt}\includegraphics[width=5.8cm]{/web/www.cheatography.com/public/images/cheatography_logo.pdf}}
+    }
+\end{tabulary}
+\columnbreak
+\begin{tabulary}{11cm}{L}
+    \vspace{-2pt}\large{\bf{\textcolor{DarkBackground}{\textrm{Redis Cheat Sheet}}}} \\
+    \normalsize{by \textcolor{DarkBackground}{James Hopkin (tasjaevan)} via \textcolor{DarkBackground}{\uline{cheatography.com/18964/cs/2046/}}}
+\end{tabulary}
+\end{multicols}}
+
+\fancyfoot[L]{ \footnotesize
+\noindent
+\begin{multicols}{3}
+\begin{tabulary}{5.8cm}{LL}
+  \SetRowColor{FootBackground}
+  \mymulticolumn{2}{p{5.377cm}}{\bf\textcolor{white}{Cheatographer}}  \\
+  \vspace{-2pt}James Hopkin (tasjaevan) \\
+  \uline{cheatography.com/tasjaevan} \\
+  \end{tabulary}
+\vfill
+\columnbreak
+\begin{tabulary}{5.8cm}{L}
+  \SetRowColor{FootBackground}
+  \mymulticolumn{1}{p{5.377cm}}{\bf\textcolor{white}{Cheat Sheet}}  \\
+   \vspace{-2pt}Published 8th May, 2014.\\
+   Updated 10th November, 2015.\\
+   Page {\thepage} of \pageref{LastPage}.
+\end{tabulary}
+\vfill
+\columnbreak
+\begin{tabulary}{5.8cm}{L}
+  \SetRowColor{FootBackground}
+  \mymulticolumn{1}{p{5.377cm}}{\bf\textcolor{white}{Sponsor}}  \\
+  \SetRowColor{white}
+  \vspace{-5pt}
+  %\includegraphics[width=48px,height=48px]{dave.jpeg}
+  Measure your website readability!\\
+  www.readability-score.com
+\end{tabulary}
+\end{multicols}}
+
+
+
+
+\begin{document}
+\raggedright
+\raggedcolumns
+
+% Set font size to small. Switch to any value
+% from this page to resize cheat sheet text:
+% www.emerson.emory.edu/services/latex/latex_169.html
+\footnotesize % Small font.
+
+\begin{multicols*}{3}
+
+\begin{tabularx}{5.377cm}{x{2.9862 cm} x{1.9908 cm} }
+\SetRowColor{DarkBackground}
+\mymulticolumn{2}{x{5.377cm}}{\bf\textcolor{white}{Strings}}  \tn
+% Row 0
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/append"\}\}APPEND & Append \tn 
+% Row Count 3 (+ 3)
+% Row 1
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/bitcount"\}\}BITCOUNT & Count set bits \tn 
+% Row Count 6 (+ 3)
+% Row 2
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/bitop"\}\}BITOP & Bitwise operations \tn 
+% Row Count 9 (+ 3)
+% Row 3
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/bitpos"\}\}BITPOS & Find first set bit \tn 
+% Row Count 12 (+ 3)
+% Row 4
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/decr"\}\}DECR & Decrement integer \tn 
+% Row Count 15 (+ 3)
+% Row 5
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/decrby"\}\}DECRBY & Subtract from integer \tn 
+% Row Count 18 (+ 3)
+% Row 6
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/get"\}\}GET & Get by key \tn 
+% Row Count 21 (+ 3)
+% Row 7
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/getbit"\}\}GETBIT & Get bit by index \tn 
+% Row Count 24 (+ 3)
+% Row 8
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/getrange"\}\}GETRANGE & Get substring \tn 
+% Row Count 27 (+ 3)
+% Row 9
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/getset"\}\}GETSET & Set, returning old value \tn 
+% Row Count 30 (+ 3)
+\end{tabularx}
+\par\addvspace{1.3em}
+
+\vfill
+\columnbreak
+\begin{tabularx}{5.377cm}{x{2.9862 cm} x{1.9908 cm} }
+\SetRowColor{DarkBackground}
+\mymulticolumn{2}{x{5.377cm}}{\bf\textcolor{white}{Strings (cont)}}  \tn
+% Row 10
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/incr"\}\}INCR & Increment integer \tn 
+% Row Count 3 (+ 3)
+% Row 11
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/incrby"\}\}INCRBY & Add to integer \tn 
+% Row Count 6 (+ 3)
+% Row 12
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/incrbyfloat"\}\}INCRBYFLOAT & Add to float \tn 
+% Row Count 9 (+ 3)
+% Row 13
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/mget"\}\}MGET & Get multiple \tn 
+% Row Count 12 (+ 3)
+% Row 14
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/mset"\}\}MSET & Set multiple \tn 
+% Row Count 15 (+ 3)
+% Row 15
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/msetnx"\}\}MSETNX & Set multiple if don't exist \tn 
+% Row Count 18 (+ 3)
+% Row 16
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/psetex"\}\}PSETEX & Set with expiry (ms) \tn 
+% Row Count 21 (+ 3)
+% Row 17
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/set"\}\}SET & Set \tn 
+% Row Count 24 (+ 3)
+% Row 18
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/setbit"\}\}SETBIT & Set bit by index \tn 
+% Row Count 27 (+ 3)
+% Row 19
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/setex"\}\}SETEX & Set with expiry (seconds) \tn 
+% Row Count 30 (+ 3)
+\end{tabularx}
+\par\addvspace{1.3em}
+
+\vfill
+\columnbreak
+\begin{tabularx}{5.377cm}{x{2.9862 cm} x{1.9908 cm} }
+\SetRowColor{DarkBackground}
+\mymulticolumn{2}{x{5.377cm}}{\bf\textcolor{white}{Strings (cont)}}  \tn
+% Row 20
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/setnx"\}\}SETNX & Set if doesn't exist \tn 
+% Row Count 3 (+ 3)
+% Row 21
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/setrange"\}\}SETRANGE & Set substring \tn 
+% Row Count 6 (+ 3)
+% Row 22
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/strlen"\}\}STRLEN & Get length \tn 
+% Row Count 9 (+ 3)
+\hhline{>{\arrayrulecolor{DarkBackground}}--}
+\SetRowColor{LightBackground}
+\mymulticolumn{2}{x{5.377cm}}{Strings can be used as numbers, arrays, bit sets and binary data}  \tn 
+\hhline{>{\arrayrulecolor{DarkBackground}}--}
+\end{tabularx}
+\par\addvspace{1.3em}
+
+\begin{tabularx}{5.377cm}{x{2.88666 cm} x{2.09034 cm} }
+\SetRowColor{DarkBackground}
+\mymulticolumn{2}{x{5.377cm}}{\bf\textcolor{white}{Lists}}  \tn
+% Row 0
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/blpop"\}\}BLPOP & Blocking left pop \tn 
+% Row Count 3 (+ 3)
+% Row 1
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/brpop"\}\}BRPOP & Blocking right pop \tn 
+% Row Count 6 (+ 3)
+% Row 2
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/brpoplpush"\}\}BRPOPLPUSH & Blocking rotate \tn 
+% Row Count 9 (+ 3)
+% Row 3
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/lindex"\}\}LINDEX & Access by index \tn 
+% Row Count 12 (+ 3)
+% Row 4
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/linsert"\}\}LINSERT & Insert next to \tn 
+% Row Count 15 (+ 3)
+% Row 5
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/llen"\}\}LLEN & Get length \tn 
+% Row Count 18 (+ 3)
+% Row 6
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/lpop"\}\}LPOP & Pop from start \tn 
+% Row Count 21 (+ 3)
+% Row 7
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/lpush"\}\}LPUSH & Push onto start \tn 
+% Row Count 24 (+ 3)
+% Row 8
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/lpushx"\}\}LPUSHX & Push if list exists \tn 
+% Row Count 27 (+ 3)
+% Row 9
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/lrange"\}\}LRANGE & Access range \tn 
+% Row Count 30 (+ 3)
+\end{tabularx}
+\par\addvspace{1.3em}
+
+\vfill
+\columnbreak
+\begin{tabularx}{5.377cm}{x{2.88666 cm} x{2.09034 cm} }
+\SetRowColor{DarkBackground}
+\mymulticolumn{2}{x{5.377cm}}{\bf\textcolor{white}{Lists (cont)}}  \tn
+% Row 10
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/lrem"\}\}LREM & Remove \tn 
+% Row Count 3 (+ 3)
+% Row 11
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/lset"\}\}LSET & Set item by index \tn 
+% Row Count 6 (+ 3)
+% Row 12
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/ltrim"\}\}LTRIM & Remove start and/or end items \tn 
+% Row Count 9 (+ 3)
+% Row 13
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/rpop"\}\}RPOP & Pop from end \tn 
+% Row Count 12 (+ 3)
+% Row 14
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/rpoplpush"\}\}RPOPLPUSH & Rotate \tn 
+% Row Count 15 (+ 3)
+% Row 15
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/rpush"\}\}RPUSH & Push onto end \tn 
+% Row Count 18 (+ 3)
+% Row 16
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/rpushx"\}\}RPUSHX & Push onto end if list exists \tn 
+% Row Count 21 (+ 3)
+\hhline{>{\arrayrulecolor{DarkBackground}}--}
+\end{tabularx}
+\par\addvspace{1.3em}
+
+\begin{tabularx}{5.377cm}{x{2.88666 cm} x{2.09034 cm} }
+\SetRowColor{DarkBackground}
+\mymulticolumn{2}{x{5.377cm}}{\bf\textcolor{white}{Client/Server}}  \tn
+% Row 0
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/auth"\}\}AUTH & Request authentication \tn 
+% Row Count 3 (+ 3)
+% Row 1
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/echo"\}\}ECHO & Return message \tn 
+% Row Count 6 (+ 3)
+% Row 2
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/ping"\}\}PING & Test connection \tn 
+% Row Count 9 (+ 3)
+% Row 3
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/quit"\}\}QUIT & Close connection \tn 
+% Row Count 12 (+ 3)
+% Row 4
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/select"\}\}SELECT & Set current database by index \tn 
+% Row Count 15 (+ 3)
+\hhline{>{\arrayrulecolor{DarkBackground}}--}
+\end{tabularx}
+\par\addvspace{1.3em}
+
+\begin{tabularx}{5.377cm}{x{3.08574 cm} x{1.89126 cm} }
+\SetRowColor{DarkBackground}
+\mymulticolumn{2}{x{5.377cm}}{\bf\textcolor{white}{Sets}}  \tn
+% Row 0
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/sadd"\}\}SADD & Add item \tn 
+% Row Count 3 (+ 3)
+% Row 1
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/scard"\}\}SCARD & Get size \tn 
+% Row Count 6 (+ 3)
+% Row 2
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/sdiff"\}\}SDIFF & Get difference \tn 
+% Row Count 9 (+ 3)
+% Row 3
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/sdiffstore"\}\}SDIFFSTORE & Store difference \tn 
+% Row Count 12 (+ 3)
+% Row 4
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/sinter"\}\}SINTER & Intersection \tn 
+% Row Count 15 (+ 3)
+% Row 5
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/sinterstore"\}\}SINTERSTORE & Store intersection \tn 
+% Row Count 18 (+ 3)
+% Row 6
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/sismember"\}\}SISMEMBER & Check for item \tn 
+% Row Count 21 (+ 3)
+% Row 7
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/smembers"\}\}SMEMBERS & Get all \tn 
+% Row Count 24 (+ 3)
+% Row 8
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/smove"\}\}SMOVE & Move item to another set \tn 
+% Row Count 27 (+ 3)
+% Row 9
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/spop"\}\}SPOP & Pop random item \tn 
+% Row Count 30 (+ 3)
+\end{tabularx}
+\par\addvspace{1.3em}
+
+\vfill
+\columnbreak
+\begin{tabularx}{5.377cm}{x{3.08574 cm} x{1.89126 cm} }
+\SetRowColor{DarkBackground}
+\mymulticolumn{2}{x{5.377cm}}{\bf\textcolor{white}{Sets (cont)}}  \tn
+% Row 10
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/srandmember"\}\}SRANDMEMBER & Get random item \tn 
+% Row Count 3 (+ 3)
+% Row 11
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/srem"\}\}SREM & Remove matching \tn 
+% Row Count 6 (+ 3)
+% Row 12
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/sscan"\}\}SSCAN & Iterate items \tn 
+% Row Count 9 (+ 3)
+% Row 13
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/sunion"\}\}SUNION & Union \tn 
+% Row Count 12 (+ 3)
+% Row 14
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/sunionstore"\}\}SUNIONSTORE & Store union \tn 
+% Row Count 15 (+ 3)
+\hhline{>{\arrayrulecolor{DarkBackground}}--}
+\end{tabularx}
+\par\addvspace{1.3em}
+
+\begin{tabularx}{5.377cm}{x{2.4885 cm} x{2.4885 cm} }
+\SetRowColor{DarkBackground}
+\mymulticolumn{2}{x{5.377cm}}{\bf\textcolor{white}{Database}}  \tn
+% Row 0
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/del"\}\}DEL & Delete item \tn 
+% Row Count 3 (+ 3)
+% Row 1
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/dump"\}\}DUMP & Serialise item \tn 
+% Row Count 6 (+ 3)
+% Row 2
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/exists"\}\}EXISTS & Check for key \tn 
+% Row Count 9 (+ 3)
+% Row 3
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/expire"\}\}EXPIRE & Set timeout on item \tn 
+% Row Count 12 (+ 3)
+% Row 4
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/expireat"\}\}EXPIREAT & Set timeout by timestamp \tn 
+% Row Count 16 (+ 4)
+% Row 5
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/keys"\}\}KEYS & Get all keys matching pattern \tn 
+% Row Count 19 (+ 3)
+% Row 6
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/migrate"\}\}MIGRATE & Transfer an item between Redis instances \tn 
+% Row Count 22 (+ 3)
+% Row 7
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/move"\}\}MOVE & Transfer an item between databases \tn 
+% Row Count 25 (+ 3)
+% Row 8
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/object"\}\}OBJECT & Inspect item \tn 
+% Row Count 28 (+ 3)
+% Row 9
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/persist"\}\}PERSIST & Remove timeout \tn 
+% Row Count 31 (+ 3)
+\end{tabularx}
+\par\addvspace{1.3em}
+
+\vfill
+\columnbreak
+\begin{tabularx}{5.377cm}{x{2.4885 cm} x{2.4885 cm} }
+\SetRowColor{DarkBackground}
+\mymulticolumn{2}{x{5.377cm}}{\bf\textcolor{white}{Database (cont)}}  \tn
+% Row 10
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/pexpire"\}\}PEXPIRE & Set timeout (ms) \tn 
+% Row Count 3 (+ 3)
+% Row 11
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/pexpireat"\}\}PEXPIREAT & Set timeout (ms timestamp) \tn 
+% Row Count 7 (+ 4)
+% Row 12
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/pttl"\}\}PTTL & Get item time to live (ms) \tn 
+% Row Count 10 (+ 3)
+% Row 13
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/randomkey"\}\}RANDOMKEY & Get random key \tn 
+% Row Count 14 (+ 4)
+% Row 14
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/rename"\}\}RENAME & Change item's key \tn 
+% Row Count 17 (+ 3)
+% Row 15
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/renamenx"\}\}RENAMENX & Change item's key if new key doesn't exist \tn 
+% Row Count 21 (+ 4)
+% Row 16
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/restore"\}\}RESTORE & Deserialise \tn 
+% Row Count 24 (+ 3)
+% Row 17
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/scan"\}\}SCAN & Iterate keys \tn 
+% Row Count 27 (+ 3)
+% Row 18
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/sort"\}\}SORT & Get or store sorted copy of list, set or sorted set \tn 
+% Row Count 30 (+ 3)
+\end{tabularx}
+\par\addvspace{1.3em}
+
+\vfill
+\columnbreak
+\begin{tabularx}{5.377cm}{x{2.4885 cm} x{2.4885 cm} }
+\SetRowColor{DarkBackground}
+\mymulticolumn{2}{x{5.377cm}}{\bf\textcolor{white}{Database (cont)}}  \tn
+% Row 19
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/ttl"\}\}TTL & Get item time to live \tn 
+% Row Count 3 (+ 3)
+% Row 20
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/type"\}\}TYPE & Get type of item \tn 
+% Row Count 6 (+ 3)
+\hhline{>{\arrayrulecolor{DarkBackground}}--}
+\end{tabularx}
+\par\addvspace{1.3em}
+
+\begin{tabularx}{5.377cm}{x{3.38436 cm} x{1.59264 cm} }
+\SetRowColor{DarkBackground}
+\mymulticolumn{2}{x{5.377cm}}{\bf\textcolor{white}{Scripts}}  \tn
+% Row 0
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/eval"\}\}EVAL & Run \tn 
+% Row Count 2 (+ 2)
+% Row 1
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/evalsha"\}\}EVALSHA & Run cached \tn 
+% Row Count 5 (+ 3)
+% Row 2
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/script-exists"\}\}SCRIPT EXISTS & Check by hash \tn 
+% Row Count 8 (+ 3)
+% Row 3
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/script-flush"\}\}SCRIPT FLUSH & Clear cache \tn 
+% Row Count 11 (+ 3)
+% Row 4
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/script-kill"\}\}SCRIPT KILL & Kill running script \tn 
+% Row Count 14 (+ 3)
+% Row 5
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/script-load"\}\}SCRIPT LOAD & Add to cache \tn 
+% Row Count 17 (+ 3)
+\hhline{>{\arrayrulecolor{DarkBackground}}--}
+\SetRowColor{LightBackground}
+\mymulticolumn{2}{x{5.377cm}}{Lua scripts access keys through the array KEYS and additional arguments through the array ARGV.}  \tn 
+\hhline{>{\arrayrulecolor{DarkBackground}}--}
+\end{tabularx}
+\par\addvspace{1.3em}
+
+\begin{tabularx}{5.377cm}{x{3.08574 cm} x{1.89126 cm} }
+\SetRowColor{DarkBackground}
+\mymulticolumn{2}{x{5.377cm}}{\bf\textcolor{white}{Hashes}}  \tn
+% Row 0
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/hdel"\}\}HDEL & Delete item \tn 
+% Row Count 3 (+ 3)
+% Row 1
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/hexists"\}\}HEXISTS & Check for item \tn 
+% Row Count 6 (+ 3)
+% Row 2
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/hget"\}\}HGET & Get item \tn 
+% Row Count 9 (+ 3)
+% Row 3
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/hgetall"\}\}HGETALL & Return all items \tn 
+% Row Count 12 (+ 3)
+% Row 4
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/hincrby"\}\}HINCRBY & Add to integer value \tn 
+% Row Count 15 (+ 3)
+% Row 5
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/hincrbyfloat"\}\}HINCRBYFLOAT & Add to float value \tn 
+% Row Count 18 (+ 3)
+% Row 6
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/hkeys"\}\}HKEYS & Return all keys \tn 
+% Row Count 21 (+ 3)
+% Row 7
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/hlen"\}\}HLEN & Get number of items \tn 
+% Row Count 24 (+ 3)
+% Row 8
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/hmget"\}\}HMGET & Get multiple items \tn 
+% Row Count 27 (+ 3)
+% Row 9
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/hmset"\}\}HMSET & Set multiple items \tn 
+% Row Count 30 (+ 3)
+\end{tabularx}
+\par\addvspace{1.3em}
+
+\vfill
+\columnbreak
+\begin{tabularx}{5.377cm}{x{3.08574 cm} x{1.89126 cm} }
+\SetRowColor{DarkBackground}
+\mymulticolumn{2}{x{5.377cm}}{\bf\textcolor{white}{Hashes (cont)}}  \tn
+% Row 10
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/hscan"\}\}HSCAN & Iterate items \tn 
+% Row Count 3 (+ 3)
+% Row 11
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/hset"\}\}HSET & Set item \tn 
+% Row Count 6 (+ 3)
+% Row 12
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/hsetnx"\}\}HSETNX & Set item if doesn't exist \tn 
+% Row Count 9 (+ 3)
+% Row 13
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/hvals"\}\}HVALS & Return all values \tn 
+% Row Count 12 (+ 3)
+\hhline{>{\arrayrulecolor{DarkBackground}}--}
+\end{tabularx}
+\par\addvspace{1.3em}
+
+\begin{tabularx}{5.377cm}{x{2.4885 cm} x{2.4885 cm} }
+\SetRowColor{DarkBackground}
+\mymulticolumn{2}{x{5.377cm}}{\bf\textcolor{white}{Sorted sets}}  \tn
+% Row 0
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/zadd"\}\}ZADD & Add item \tn 
+% Row Count 3 (+ 3)
+% Row 1
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/zcard"\}\}ZCARD & Get number of items \tn 
+% Row Count 6 (+ 3)
+% Row 2
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/zcount"\}\}ZCOUNT & Number of items within score range \tn 
+% Row Count 9 (+ 3)
+% Row 3
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/zincrby"\}\}ZINCRBY & Add to score \tn 
+% Row Count 12 (+ 3)
+% Row 4
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/zinterstore"\}\}ZINTERSTORE & Store intersection \tn 
+% Row Count 16 (+ 4)
+% Row 5
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/zlexcount"\}\}ZLEXCOUNT & Lexicographical range count \tn 
+% Row Count 20 (+ 4)
+% Row 6
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/zrange"\}\}ZRANGE & Get items within rank range \tn 
+% Row Count 23 (+ 3)
+% Row 7
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/zlexrange"\}\}ZLEXRANGE & Get items within lexicographical range \tn 
+% Row Count 27 (+ 4)
+% Row 8
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/zrangebyscore"\}\}ZRANGEBYSCORE & Get items within score range \tn 
+% Row Count 31 (+ 4)
+\end{tabularx}
+\par\addvspace{1.3em}
+
+\vfill
+\columnbreak
+\begin{tabularx}{5.377cm}{x{2.4885 cm} x{2.4885 cm} }
+\SetRowColor{DarkBackground}
+\mymulticolumn{2}{x{5.377cm}}{\bf\textcolor{white}{Sorted sets (cont)}}  \tn
+% Row 9
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/zrank"\}\}ZRANK & Get item rank \tn 
+% Row Count 3 (+ 3)
+% Row 10
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/zrem"\}\}ZREM & Remove item(s) \tn 
+% Row Count 6 (+ 3)
+% Row 11
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/zremrangebylex"\}\}ZREMRANGEBYLEX & Remove items within lexicographical range \tn 
+% Row Count 10 (+ 4)
+% Row 12
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/zremrangebyrank"\}\}ZREMRANGEBYRANK & Remove items within rank range \tn 
+% Row Count 14 (+ 4)
+% Row 13
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/zremrangebyscore"\}\}ZREMRANGEBYSCORE & Remove items within score range \tn 
+% Row Count 18 (+ 4)
+% Row 14
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/zrevrange"\}\}ZREVRANGE & ZRANGE in reverse order \tn 
+% Row Count 22 (+ 4)
+% Row 15
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/zrevrangebyscore"\}\}ZREVRANGEBYSCORE & ZRANGEBYSCORE in reverse order \tn 
+% Row Count 26 (+ 4)
+% Row 16
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/zrevrank"\}\}ZREVRANK & ZRANK in reverse order \tn 
+% Row Count 30 (+ 4)
+\end{tabularx}
+\par\addvspace{1.3em}
+
+\vfill
+\columnbreak
+\begin{tabularx}{5.377cm}{x{2.4885 cm} x{2.4885 cm} }
+\SetRowColor{DarkBackground}
+\mymulticolumn{2}{x{5.377cm}}{\bf\textcolor{white}{Sorted sets (cont)}}  \tn
+% Row 17
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/zscan"\}\}ZSCAN & Iterate items \tn 
+% Row Count 3 (+ 3)
+% Row 18
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/zscore"\}\}ZSCORE & Get item score \tn 
+% Row Count 6 (+ 3)
+% Row 19
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/zunionstore"\}\}ZUNIONSTORE & Store union \tn 
+% Row Count 10 (+ 4)
+\hhline{>{\arrayrulecolor{DarkBackground}}--}
+\SetRowColor{LightBackground}
+\mymulticolumn{2}{x{5.377cm}}{Lexicographical commands require all items to have the same score}  \tn 
+\hhline{>{\arrayrulecolor{DarkBackground}}--}
+\end{tabularx}
+\par\addvspace{1.3em}
+
+\begin{tabularx}{5.377cm}{x{3.33459 cm} x{1.64241 cm} }
+\SetRowColor{DarkBackground}
+\mymulticolumn{2}{x{5.377cm}}{\bf\textcolor{white}{HyperLogLogs}}  \tn
+% Row 0
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/pfadd"\}\}PFADD & Add items \tn 
+% Row Count 3 (+ 3)
+% Row 1
+\SetRowColor{white}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/pfcount"\}\}PFCOUNT & Get approximate size \tn 
+% Row Count 6 (+ 3)
+% Row 2
+\SetRowColor{LightBackground}
+\{\{noshy\}\}\{\{popup="http://redis.io/commands/pfmerge"\}\}PFMERGE & Merge HyperLogLogs \tn 
+% Row Count 9 (+ 3)
+\hhline{>{\arrayrulecolor{DarkBackground}}--}
+\end{tabularx}
+\par\addvspace{1.3em}
+
+
+% That's all folks
+\end{multicols*}
+
+\end{document}
