@@ -303,8 +303,6 @@ car.start(); // 打印‘启动’6次，打印‘启动成功’一次。
 
 支持回调和promise的写法
 
-对比SyncHook, 我们想要希望这个顺序执行的函数数组, 每一个函数中执行的是一个异步函数, 比如IO或者定时器.
-
 AsyncParallelHook处理异步并行执行的插件。
 我们在Car类中添加calculateRoutes，使用AsyncParallelHook。再写一个calculateRoutes方法，调用callAsync方法时会触发钩子执行。这里可以传递一个回调，当所有插件都执行完毕的时候，被调用。
 
@@ -333,8 +331,6 @@ export default class Car {
 ```
 
 ### AsyncParallelBailHook
-
-对比SyncHook, 我们想要希望这个顺序执行的函数数组, 每一个函数中执行的是一个异步函数, 比如IO或者定时器. 这时候排序在前面的函数,
 
 回调  callback(null ,1); // 第一个参数是err, 这里传递个1，第二个参数传递result
 
