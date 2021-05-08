@@ -39,6 +39,7 @@ if (!Function.prototype.bind) (function(){
 
     var baseArgs= ArrayPrototypeSlice.call(arguments, 1),
         baseArgsLength = baseArgs.length,
+        // 这个是函数本身
         fToBind = this,
         fNOP    = function() {},
         fBound  = function() {
@@ -52,10 +53,22 @@ if (!Function.prototype.bind) (function(){
 
     if (this.prototype) {
       // Function.prototype doesn't have a prototype property
+      // Function.prototype.bind({}).prototype.prototype 这个情况, 不加判断为 undefined
       fNOP.prototype = this.prototype;
     }
+    // 如果不使用中间层的话, 会出现修改this.prototype, 也就是原函数的prototype
     fBound.prototype = new fNOP();
 
     return fBound;
   };
 })();
+
+
+// function a () {}
+// undefined
+// const abind = a.bind(1)
+// undefined
+// abind.prototype.a = 1
+// 1
+// a.prototype
+// {a: 1, constructor: ƒ}

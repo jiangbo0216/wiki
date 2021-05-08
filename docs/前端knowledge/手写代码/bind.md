@@ -11,7 +11,7 @@
 
 来个例子说明下：
 
-```
+```js
 let value = 2;
 let foo = {
     value: 1
@@ -45,7 +45,7 @@ bindFoo2(20);
 
 ### 模拟实现
 
-```
+```js
 Function.prototype.bind = function (context) {
     // 调用 bind 的不是函数，需要抛出异常
     if (typeof this !== "function") {
@@ -74,7 +74,7 @@ Function.prototype.bind = function (context) {
 
 来个例子说明下：
 
-```
+```js
 let value = 2;
 let foo = {
     value: 1
@@ -104,7 +104,7 @@ obj.friend;
 
 这个可以通过修改返回函数的原型来实现，代码如下:
 
-```
+```js
 Function.prototype.bind = function (context) {
     // 调用 bind 的不是函数，需要抛出异常
     if (typeof this !== "function") {
