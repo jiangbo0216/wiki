@@ -20,3 +20,6 @@ B树简单理解成将二路搜索树合并得到的, 所以子树比关键字�
 4. 非叶子节点的构成 链表或者数组(向量), 或者用两个链表或者数组分别保存关键字和子树引用
 
 5. 存在外部节点
+
+
+https://wizardforcel.gitbooks.io/the-art-of-programming-by-july/content/03.02.html

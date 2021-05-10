@@ -20,7 +20,7 @@ function render (vnode, container) { // 久 vnode 通过 container.vnode 引用�
    1. Vue3 的异步渲染是基于调度器的实现，若要实现异步渲染，组件的挂载就不能同步进行，DOM的变更就要在合适的时机，一些需要在真实DOM存在之后才能执行的操作(如 ref)也应该在合适的时机进行。对于时机的控制是由调度器来完成的，但类似于组件的挂载与卸载以及操作 DOM 等行为的入队还是由渲染器来完成的，这也是为什么 Vue2 无法轻易实现异步渲染的原因。
 4. 包含核心的 Diff 算法
 
-### 挂载mount
+### 挂载普通标签元素
 
 mount 函数的作用是把一个 VNode 渲染成真实 DOM，根据不同类型的 VNode 需要采用不同的挂载方式
 
@@ -45,3 +45,28 @@ function mount(vnode, container) {
   }
 }
 ```
+
+#### 问题
+
+- 1、`VNode` 被渲染为真实DOM之后，没有引用真实DOM元素
+- 2、没有将 `VNodeData` 应用到真实DOM元素上
+- 3、没有继续挂载子节点，即 `children`
+- 4、不能严谨地处理 `SVG` 标签
+
+
+
+#### Attributes 和 DOM Properties
+```html
+<body custom="val"></body>
+```
+通过 document.body.custom 访问其值时会得到 undefined，这也是为什么 setAttribute 方法存在的原因.
+
+```js
+// checkbox 元素
+const checkboxEl = document.querySelector('input')
+// 使用 setAttribute 设置 checked 属性为 false
+checkboxEl.setAttribute('checked', false)
+
+console.log(checkboxEl.checked) // true
+```
+这就指引我们有些属性不能通过 setAttribute 设置，而是应该直接通过 DOM 元素设置：el.checked = true。好在这样的属性不多，我们可以列举出来：value、checked、selected、muted。除此之外还有一些属性也需要使用 Property 的方式设置到 DOM 元素上，例如 innerHTML 和 textContent 等等。
