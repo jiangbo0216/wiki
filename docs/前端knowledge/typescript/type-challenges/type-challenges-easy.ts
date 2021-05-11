@@ -28,16 +28,12 @@ type TypeName<T> = T extends string
 type T1 = TypeName<"a">;
 type T5 = TypeName<string | (() => void)>;
 
-// Exclude
+// Exclude 从集合中排除
 type exclude1 = Exclude<'a' | 'b' | 'c', 'a'>
 type MyExclude<T, U> = T extends U ? never : T
 type exclude2 = MyExclude<'a' | 'b' | 'c', 'a'>
 
-// ReadOnly
-type todo_ReadOnly = Readonly<todo>
-type MyReadOnly<T> = {
-  readonly [k in keyof T]: T[k];
-}
+
 
 const tuple = ['tesla', 'model 3', 'model X', 'model Y'] as const
 // Tuple to Object
