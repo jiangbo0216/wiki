@@ -139,3 +139,46 @@ type fdd<T extends any[]> = {
 
 type aaaa = fdd<[1,2,3]>
 
+
+// https://github.com/type-challenges/type-challenges/issues/737
+/**
+ * UnionToIntersection<{ foo: string } | { bar: string }> =
+ *  { foo: string } & { bar: string }.
+ */
+ type UnionToIntersection<U> = (
+  U extends unknown ? (arg: U) => 0 : never
+) extends (arg: infer I) => 0
+  ? I
+  : never;
+
+/**
+ * LastInUnion<1 | 2> = 2.
+ */
+type LastInUnion<U> = UnionToIntersection<
+  U extends unknown ? (x: U) => 0 : never
+> extends (x: infer L) => 0
+  ? L
+  : never;
+
+
+/**
+ * UnionToTuple<1 | 2> = [1, 2].
+ */
+type UnionToTuple<U, Last = LastInUnion<U>> = [U] extends [never]
+  ? []
+  : [...UnionToTuple<Exclude<U, Last>>, Last];
+
+type aaaaaa = LastInUnion<1|2>
+
+type aaaaa = (((x: 1) => 0) & ((x: 2) => 0)) extends (x: infer L) => 0
+? L
+: never;
+
+type bbb = ((x: 1) => 0) & ((x: 2) => 0)
+
+function cc(x: 1 | 2): 0 {
+  return 0
+}
+let dd: bbb = cc
+type UnionToTuple111<T> = { [P in T as string]: [P] }[string];
+type a1a = UnionToTuple111<1|2>
