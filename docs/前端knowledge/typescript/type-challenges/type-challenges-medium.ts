@@ -182,3 +182,158 @@ function cc(x: 1 | 2): 0 {
 let dd: bbb = cc
 type UnionToTuple111<T> = { [P in T as string]: [P] }[string];
 type a1a = UnionToTuple111<1|2>
+
+// Type lookup
+interface Cat {
+  type: 'cat'
+  breeds: 'Abyssinian' | 'Shorthair' | 'Curl' | 'Bengal'
+}
+
+interface Dog {
+  type: 'dog'
+  breeds: 'Hound' | 'Brittany' | 'Bulldog' | 'Boxer'
+  color: 'brown' | 'white' | 'black'
+}
+
+type LookUp<T extends {type: string}, P> = T extends {type: P} ? T : never
+type LookUp1<T extends {type: string}, P> = T['type'] extends P ? T : never
+
+type MyDogType = LookUp<Cat | Dog, 'dog'> // expected to be `Dog`
+type MyDogType1 = LookUp1<Cat | Dog, 'dog'> // expected to be `Dog`
+
+
+// Distributed condition type only in Generics
+type aaaaabb = 'dog' | 'cat' extends 'dog' ? true : never
+
+type aaaaabb4 = ('cat' extends 'dog' ? true : never) | ('dog' extends 'dog' ? true : never)
+type aaaaabb1 = ('dog' extends 'dog' ? true : never)
+type aaaaabb2 = ('cat' extends 'dog' ? true : never)
+type aaaaabb3 = true | never
+
+
+// Trim Left
+type TrimLeft<S extends string> = S extends `${" " | "\n" | "\t"}${infer R}`
+  ? TrimLeft<R>
+  : S;
+
+// Trim
+type Trim<S extends string> = S extends `${' ' | '\t' | '\n'}${infer R}` ? Trim<R> : S extends `${infer R}${' ' | '\t' | '\n'}` ? Trim<R> : S
+
+// Capitalize
+type Capitalize1<S extends string> = S extends `${infer F}${infer R}` ? `${Uppercase<F>}${R}` : S
+
+type CharMap = { "a": "A", "b": "B", "c": "C", "d": "D", "e": "E", "f": "F", "g": "G", "h": "H", "i": "I", "j": "J", "k": "K", "l": "L", "m": "M", "n": "N", "o": "O", "p": "P", "q": "Q", "r": "R", "s": "S", "t": "T", "u": "U", "v": "V", "w": "W", "x": "X", "y": "Y", "z": "Z" }
+type Capitalize2<S extends string> =
+    S extends `${infer First}${infer U}` ?
+    (First extends keyof CharMap ? `${CharMap[First]}${U}` : S)
+    : S;
+
+// Replace
+type Replace<S extends string, From extends string, To extends string> = S extends `${infer F}${From}${infer E}` ? From extends '' ? S : `${F}${To}${E}` : S
+
+// ReplaceAll
+type ReplaceAll<S extends string, From extends string, To extends string> = S extends `${infer F}${From}${infer E}` ? From extends '' ? S : `${F}${ReplaceAll<`${To}${E}`, From, To>}` : S
+
+// Append Argument
+//keeps original parameters' name and added "appendArg" for appened argument name.
+//not using built-in "Parameters" and "ReturnType"
+
+type AppendArgument<Fn extends (...args: any) => any, A> = Fn extends (
+  ...args: infer T
+) => infer R
+  ? (...args: [...args: T, appendArg: A]) => R
+  : never;
+
+// Permutation
+type Permutation<T, K=T> =
+    [T] extends [never]
+      ? []
+      : K extends K
+        ? [K, ...Permutation<Exclude<T, K>>]
+        : never
+
+type Permuted = Permutation<'a' | 'b'>  // ['a', 'b'] | ['b' | 'a']
+
+type StringToArray<S extends string, A extends any[] = []> =
+    S extends `${infer Char}${infer Other}`
+    ? StringToArray<Other, [...A, Char]>
+    : [...A];
+type StringToArrayDemo = StringToArray<'123'> // ["1", "2", "3"]
+
+
+type LengthOfString<S extends string> = StringToArray<S>['length']
+type LengthOfString1<S extends string> = S['length'] 
+type a21 = LengthOfString1<'123'> // number
+type a22 = LengthOfString<'123'> // 3
+type a23 = [1,2,3]['length']
+
+
+// FLat
+type Flatten<T extends any[]> = T extends [infer F, ...infer R] ? [...(F extends any[] ? Flatten<F> : [F]), ...Flatten<R>]
+: T;
+
+// Append to object
+type Test = { id: '1' }
+type AppendToObject<T, P extends string, V> = {
+  [K in keyof T | P]: K extends keyof T ? T[K] : V
+}
+type Result11 = AppendToObject<Test, 'value', 4> // expected to be { id: '1', value: 4 }
+
+// Absolute
+// your answers
+type Absolute<T extends number | string | bigint> = T extends `${infer First}${infer Rest}` ?
+  First extends '-' ?
+  Rest : T : Absolute<`${T}`>
+
+
+// String to Union
+type StringToUnion<T extends string, R extends string[] = []>
+  = T extends `${infer First}${infer Rest}`
+      ? StringToUnion<Rest, [...R, First]>
+      : R[number]
+
+type Test11 = '123';
+type Result111 = StringToUnion<Test11>; // expected to be "1" | "2" | "3"
+
+// Merge
+type Merge<F, S> = {
+  [k in keyof F | keyof S]: k extends keyof S ? S[k]: k extends keyof F ? F[k] : never
+}
+
+type Flatten111<T> = {[P in keyof T]: T[P]}
+type Merge1<F, S> = Flatten111<{[P in Exclude<keyof F, keyof S>]: F[P]} & S>
+
+// CamelCase
+type CamelCase<S> = S extends `${infer S1}-${infer S2}`
+  ? S2 extends Capitalize<S2> 
+    ? `${S1}-${CamelCase<S2>}`
+    : `${S1}${CamelCase<Capitalize<S2>>}`
+  : S
+
+type KebabCase<S, T extends string = ""> = S extends `${infer First}${infer Rest}` 
+? First extends Uncapitalize<First>
+  ? KebabCase<Rest, `${T}${First}`>
+  : T extends ""
+    ? KebabCase<Rest, `${Uncapitalize<First>}`>
+    : KebabCase<Rest, `${T}-${Uncapitalize<First>}`>
+: T;
+
+type keba = KebabCase<'ooBarBaz'>
+
+type KebabCase1<S> = S extends `${infer S1}${infer S2}`
+  ? S2 extends Uncapitalize<S2>
+    ? `${Uncapitalize<S1>}${KebabCase1<S2>}`
+    : `${Uncapitalize<S1>}-${KebabCase1<S2>}` 
+  : S;
+
+// your answers
+type Diff<O, O1> = {
+  [K in (Exclude<keyof O, keyof O1> | Exclude<keyof O1, keyof O>)]: K extends keyof O ? O[K] : K extends keyof O1 ? O1[K] : never
+}
+
+// Anyof
+type Falsy = 0 | '' | false | [] | { [key: string]: never }
+type AnyOf<T extends readonly any[]> = 
+  T extends [infer H, ...infer Rest]
+  ? H extends Falsy ? AnyOf<Rest> : true
+  : false;
