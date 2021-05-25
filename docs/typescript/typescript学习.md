@@ -1,4 +1,5 @@
 ## 安装和编译
+
 ```
 npm install -g typescript
 
@@ -8,12 +9,13 @@ tsc helloworld.ts
 初始化
 tsc --init
 
-
 ## 配置vscode
-1. 创建 tsconfig.json 文件 tsc 
+
+1. 创建 tsconfig.json 文件 tsc
 2. 点击菜单 任务-运行任务 点击 tsc:监视-tsconfig.json 然后就可以自动生成代码了
 
 简单的配置
+
 ```json
 {
     "compilerOptions": {
@@ -41,11 +43,9 @@ tsc --init
 }
 ```
 
-
 ## typeScript中的数据类型
 
 typescript中为了使编写的代码更规范，更有利于维护，增加了类型校验，在typescript中主要给我们提供了以下数据类型
-
 
     布尔类型（boolean）
     数字类型（number） 
@@ -59,6 +59,7 @@ typescript中为了使编写的代码更规范，更有利于维护，增加了�
     never类型
 
 ## Promise.resolve 类型定义
+
 ```ts
 <Promise<string>>Promise.resolve('') 
 Promise.resolve('') as as Promise<string>
@@ -66,6 +67,7 @@ promise.resolve<string>('code')
 ```
 
 ## import * as xxx from ''
+
 default 导出, 需要使用 xxx.default 来获取
 
 ## keyof and Lookup Types
@@ -86,13 +88,11 @@ type K3 = keyof { [x: string]: Person }; // string
 
 The dual of this is *indexed access types*, also calle
 
-
-
 ## Mapped Types
 
 One common task is to take an existing type and make each of its properties entirely optional. Let’s say we have a `Person`:
 
-```
+```ts
 interface Person {
   name: string;
   age: number;
@@ -102,7 +102,7 @@ interface Person {
 
 A partial version of it would be:
 
-```
+```ts
 interface PartialPerson {
   name?: string;
   age?: number;
@@ -120,8 +120,6 @@ type Partial<T> = {
 type PartialPerson = Partial<Person>;
 ```
 
-
-
 ### Deferred
 
 相同的属性名称，但使值是一个 `Promise`，而不是一个具体的值：
@@ -131,10 +129,6 @@ type Deferred<T> = {
     [P in keyof T]: Promise<T[P]>;
 };
 ```
-
-
-
-
 
 ## `object` type
 
@@ -155,10 +149,12 @@ create(undefined); // Error
 ```
 
 ## 全局扩充
-参考链接：
-https://www.itranslater.com/qa/details/2109727184179954688
 
-https://www.tslang.cn/docs/handbook/declaration-merging.html
+参考链接：
+<https://www.itranslater.com/qa/details/2109727184179954688>
+
+<https://www.tslang.cn/docs/handbook/declaration-merging.html>
+
 ```ts
 import MyInterface from './MyInterface';
 

@@ -26,6 +26,7 @@ type MyReadOnly<T> = {
 
 type a111 = keyof 'a'
 type a222 = MyReadOnly<'a'>
+type a2221 = MyReadOnly<[1,2,3]>
 
 type a333 = {
   readonly [k in keyof 'a']: 'a'[k];
