@@ -10,6 +10,8 @@
 
 :<Tab>
 
+:h ex-cmd-index
+
 会自动补全展示所有的command
 
 # 基础所有motion, 使用与normal, insert, visual
