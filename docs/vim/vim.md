@@ -19,3 +19,8 @@
 :help motion
 
 # . 重复上次的修改
+
+# 共享系统剪贴板
+
+set clipboard=unnamed
+
